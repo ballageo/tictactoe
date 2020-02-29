@@ -9,7 +9,6 @@ def printBoard():
     ===========
      {} | {} | {}
         '''.format(gameboard[1], gameboard[2], gameboard[3], gameboard[4], gameboard[5], gameboard[6], gameboard[7], gameboard[8], gameboard[9]))
-
 def horzWin(x, piece):
     if gameboard[x] == piece and gameboard[x+1] == piece and gameboard[x+2] == piece:
         return True
@@ -22,7 +21,16 @@ def diag1Win(piece):
 def diag2Win(piece):
     if gameboard[3] == piece and gameboard[5] == piece and gameboard[7] == piece: 
         return True
-def draw(gameboard):
+def VerticalWin(piece):
+    if vertWin(1, piece) or vertWin(2, piece) or vertWin(3, piece):
+        return True
+def HorizontalWin(piece):
+    if horzWin(1, piece) or horzWin(4, piece) or horzWin(7, piece):
+        return True
+def DiagonalWin(piece):
+    if diag1Win(piece) or diag2Win(piece):
+        return True
+def GameDraw(gameboard):
     free = []
     for i in gameboard:
         if i == " ":
@@ -30,19 +38,18 @@ def draw(gameboard):
     if len(free) == 1:
         return True
 
-
 #setup for game
 system("cls")
 gameboard = [" "," "," "," "," "," "," "," "," "," "]
 print ('''\nHello and welcome to the greatest tic-tac-toe game!
 This will be the arena!\n
- {spot1} | {spot2} | {spot3}
+ {} | {} | {}
 ===========
- {spot4} | {spot5} |{spot6}
+ {} | {} | {}
 ===========
- {spot7} | {spot8} |{spot9}
+ {} | {} | {}
 \nFrom top-left to bottom-right, enter 1-9 to select a tile!
-Who are our lovely contestants?'''.format(spot1=gameboard[1], spot2=gameboard[2], spot3=gameboard[3], spot4=gameboard[4], spot5=gameboard[5], spot6=gameboard[6], spot7=gameboard[7], spot8=gameboard[8], spot9=gameboard[9]))
+Who are our lovely contestants?'''.format(gameboard[1], gameboard[2], gameboard[3], gameboard[4], gameboard[5], gameboard[6], gameboard[7], gameboard[8], gameboard[9]))
 player1 = raw_input("Player 1? \n")
 player2 = raw_input("Player 2? \n")
 
@@ -78,15 +85,13 @@ while 1:
         error = 2
         continue
     gameboard[selection]=piece
-    if horzWin(1, piece) or horzWin(4, piece) or horzWin(7, piece):
+    if HorizontalWin(piece):
         break
-    if vertWin(1, piece) or vertWin(2, piece) or vertWin(3, piece):
+    if VerticalWin(piece):
         break
-    if diag1Win(piece):
+    if DiagonalWin(piece):
         break
-    if diag2Win(piece):
-        break
-    if draw(gameboard):
+    if GameDraw(gameboard):
         end = 1
         break
     if turn == 1:
