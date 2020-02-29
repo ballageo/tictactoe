@@ -1,8 +1,7 @@
 from os import system
-def startgame():
-    gameboard = ['',' ',' ',' ',' ',' ',' ',' ',' ',' ']
-    test1 = "Muahaha"
-    print ('''Hello and welcome to the greatest tic-tac-toe game!
+
+gameboard = [" "," "," "," "," "," "," "," "," "," "]
+print ('''Hello and welcome to the greatest tic-tac-toe game!
 This will be the arena!
  {spot1} | {spot2} | {spot3}
 ===========
@@ -12,24 +11,81 @@ This will be the arena!
 From top-left to bottom-right, enter 1-9 to select a tile!
 Who are our lovely contestants?'''.format(spot1=gameboard[1], spot2=gameboard[2], spot3=gameboard[3], spot4=gameboard[4], spot5=gameboard[5], spot6=gameboard[6], spot7=gameboard[7], spot8=gameboard[8], spot9=gameboard[9]))
     
-    player1 = raw_input("Player 1? \n")
-    player2 = raw_input("Player 2? \n")
-    spot1, spot2, spot3, spot4, spot5, spot6, spot7, spot8, spot9 = gameboard[1], gameboard[2], gameboard[3], gameboard[4], gameboard[5], gameboard[6], gameboard[7], gameboard[8], gameboard[9]
-    system("cls")
-    print ("Wonderful!! {} goes first!\n".format(player1))
-    while 1:
+player1 = raw_input("Player 1? \n")
+player2 = raw_input("Player 2? \n")
+
+def printBoard():
+    print ('''
+     {} | {} | {}
+    ===========
+     {} | {} | {}
+    ===========
+     {} | {} | {}
+        '''.format(gameboard[1], gameboard[2], gameboard[3], gameboard[4], gameboard[5], gameboard[6], gameboard[7], gameboard[8], gameboard[9]))
+
+def horzWin(x, piece):
+    if gameboard[x] == piece and gameboard[x+1] == piece and gameboard[x+2] == piece:
+        return True
+def vertWin(x, piece):
+    if gameboard[x] == piece and gameboard[x+3] == piece and gameboard[x+6] == piece:
+        return True
+def diag1Win(piece):
+    if gameboard[1] == piece and gameboard[5] == piece and gameboard[9] == piece: 
+        return True
+def diag2Win(piece):
+    if gameboard[3] == piece and gameboard[5] == piece and gameboard[7] == piece: 
+        return True
+
+#setup for game
+turn = 1
+error = 0
+player = player1
+legal_moves = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+open_spaces = []
+for i in gameboard:
+    if i == " ":
+        open_spaces.append(i)
+# while loop for game logic
+while 1:
+
+    if error == 1:
         system('cls')
-        print ('''
- {spot1} | {spot2} | {spot3}
-===========
- {spot4} | {spot5} |{spot6}
-===========
- {spot7} | {spot8} |{spot9}
-        '''.format(spot1=spot1, spot2=spot2, spot3=spot3, spot4=spot4, spot5=spot5, spot6=spot6, spot7=spot7, spot8=spot8, spot9=spot9))
-        num = int(raw_input("Which square do you want to pick? \n"))
-        if num == 1:
-            spot1="X"
-        if num == 12:
-            break
-    
-startgame()
+        print("\nThat's the wrong move, partner! Pick an actual spot on that there board.")
+        error = 0
+    elif error == 2:
+        system("cls")
+        print("\nYou can't just go and take over spaces! This isn't the wild, wild west!")
+        error = 0
+    else:
+        system('cls')
+    if turn == 1:
+        piece = "X"
+    else:
+        piece = "O"
+    printBoard()
+    choice = raw_input("It's {}'s turn! Which square do you want to pick? \n".format(player))
+    if choice not in legal_moves:
+        error = 1
+        continue
+    selection = int(choice)
+    if gameboard[selection] != " ":
+        error = 2
+        continue
+    gameboard[selection]=piece
+    if horzWin(1, piece) or horzWin(4, piece) or horzWin(7, piece):
+        break
+    if vertWin(1, piece) or vertWin(2, piece) or vertWin(3, piece):
+        break
+    if diag1Win(piece):
+        break
+    if diag2Win(piece):
+        break
+    if turn == 1:
+        turn = 2
+        player = player2
+    else:
+        turn = 1
+        player = player1
+system("cls")
+printBoard()
+print("{} WINS!!!".format(player))
